@@ -1,6 +1,7 @@
 import streamlit as st
 import pickle
 import pandas as pd
+import scikit-learn
 
 st.title('Intelligent Employee Retention System for Churn Prediction by Dr Dilek Celik')
 st.info("The prediction is based on Gradient Boosting Model with recall(1): 0.96 and accuracy:0.99 /// Random Forest Model with recall(1): 0.97 and accuracy:0.99 /// XGB with recall(1): 0.97 and accuracy:0.99")
