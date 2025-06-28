@@ -132,28 +132,22 @@ import matplotlib.pyplot as plt
 # shap.summary_plot(shap_values, X_test)
 
 
-st.subheader("📊 Explainer")
 import shap
 import matplotlib.pyplot as plt
 
 try:
-    # Use a small sample from your already prepared X_test
-    X_test_sample = X_test.sample(n=100, random_state=42)
-
-    # Explicitly use TreeExplainer for tree-based models like XGB, RF, GB
     explainer = shap.TreeExplainer(model)
+    shap_values = explainer.shap_values(X_test)
 
-    # Get SHAP values for the sample
-    shap_values = explainer.shap_values(X_test_sample)
-
-    # SHAP Summary Plot
     st.subheader("🔍 SHAP Summary Plot (Feature Importance)")
-    fig = plt.figure()
-    shap.summary_plot(shap_values, X_test_sample, show=False)
+
+    fig, ax = plt.subplots(figsize=(8, 4))  # smaller plot size
+    shap.summary_plot(shap_values, X_test, show=False, plot_size=(8, 4))
     st.pyplot(fig)
 
 except Exception as e:
-    st.warning("⚠️ SHAP explainability failed. Likely due to model incompatibility or feature mismatch.")
+    st.warning("⚠️ SHAP explanation failed. Please check the model and features.")
     st.text(f"Error: {str(e)}")
+
 
 
