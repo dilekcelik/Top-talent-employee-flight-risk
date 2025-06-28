@@ -46,7 +46,7 @@ Work_accident       =st.sidebar.slider("Work Accident"        , 0,1)
 promotion_last_5years=st.sidebar.slider("promotion_last_5years", 0,1)
 Departments =st.sidebar.radio("Departments", ("sales","IT","RandD","Departments_hr","mng","support","technical"))
 salary      =st.sidebar.radio("Salary", ("low","medium","high"))
-model_name=st.selectbox("Select your model:", ("Gradient Boosting Model","Random Forest Model","XGB Model" ))
+model_name=st.selectbox("Select your model:", ("XGB Model" ))
 
 # --- DataFrame Creation ---
 predictions = pd.DataFrame([{
