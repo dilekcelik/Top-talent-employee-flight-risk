@@ -122,6 +122,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 # ------ Explainer------
 st.subheader("⚙️ Explainer")
+import shap
 # Train your model (assuming xgb_model is already trained)
 explainer = shap.Explainer(model)
 # Get SHAP values
