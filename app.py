@@ -3,7 +3,7 @@ import pickle
 import pandas as pd
 from PIL import Image
 
-st.set_page_config(page_title="Employee Churn Predictor", layout="wide")
+st.set_page_config(page_title="Top Talent Flight Risk Employee Prediction", layout="wide")
 # --- Header ---
 st.markdown("""
     <style>
@@ -22,7 +22,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="title">🔍 Intelligent Employee Retention System for Churn Prediction</div>', unsafe_allow_html=True)
+st.markdown('<div class="title">🧠 Top Talent Flight Risk Employee Prediction </div>', unsafe_allow_html=True)
 
 # --- Footer Image ---
 
