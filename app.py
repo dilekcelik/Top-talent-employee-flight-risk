@@ -35,17 +35,40 @@ with st.expander("ℹ️ Model Info", expanded=True):
     """, unsafe_allow_html=True)
 
 # --- Sidebar ---
-st.sidebar.header("🎛️ Input Features")
-satisfaction_level = st.sidebar.slider("Satisfaction Level", 0, 10, 5)
-last_evaluation = st.sidebar.slider("Last Evaluation", 0, 10, 5)
-number_project = st.sidebar.slider("Number of Projects", 2, 7, 4)
-average_montly_hours = st.sidebar.slider("Average Monthly Hours", 0, 500, 180, step=8)
-time_spend_company = st.sidebar.slider("Years at Company", 1, 10, 3)
-Work_accident = st.sidebar.radio("Work Accident", [0, 1])
-promotion_last_5years = st.sidebar.radio("Promotion in Last 5 Years", [0, 1])
-Departments = st.sidebar.selectbox("Department", ("sales", "IT", "RandD", "Departments_hr", "mng", "support", "technical"))
-salary = st.sidebar.radio("Salary", ("low", "medium", "high"))
-model_name = st.sidebar.selectbox("Select Model", ("XGB Model"))
+
+try:
+    explainer = shap.TreeExplainer(model)
+    shap_values = explainer.shap_values(X_test)
+
+    st.subheader("🧠 Intelligent Employee Retention System for Churn Prediction")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("#### SHAP Summary Plot")
+        fig1, ax1 = plt.subplots(figsize=(6, 4))
+        shap.summary_plot(shap_values, X_test, show=False, plot_size=(6, 4))
+        st.pyplot(fig1)
+        st.markdown("""
+        - Visualizes **how each feature** impacts prediction.
+        - Horizontal spread = **influence**, color = **feature value**.
+        - Example: High `average_monthly_hours` → Higher attrition risk.
+        """)
+
+    with col2:
+        st.markdown("#### SHAP Bar Plot")
+        fig2, ax2 = plt.subplots(figsize=(6, 4))
+        shap.plots.bar(shap_values, show=False)
+        st.pyplot(fig2)
+        st.markdown("""
+        - Shows **average impact** of each feature.
+        - Great for understanding overall importance.
+        - Useful when prioritizing **intervention areas**.
+        """)
+
+except Exception as e:
+    st.warning("⚠️ SHAP explanation failed. Please check the model and features.")
+    st.text(f"Error: {str(e)}")
 
 # --- DataFrame Creation ---
 predictions = pd.DataFrame([{
