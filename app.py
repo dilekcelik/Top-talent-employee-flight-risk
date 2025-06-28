@@ -34,17 +34,6 @@ with st.expander("ℹ️ Model Info", expanded=True):
         </div>
     """, unsafe_allow_html=True)
 
-# --- Prediction ---
-st.subheader("🎯 Prediction Result")
-if st.button("Predict Churn"):
-    prediction = model.predict(scaled_predictions)
-    if int(prediction) == 1:
-        st.error("🚨 Churn Prediction: YES - The employee is likely to leave.")
-    else:
-        st.success("✅ Churn Prediction: NO - The employee is likely to stay.") 
-# --- Images ---
-# st.image(Image.open('models_performance.png'), width=800, caption="Model Performance")
-
 # --- Sidebar ---
 st.sidebar.header("🎛️ Input Features")
 satisfaction_level = st.sidebar.slider("Satisfaction Level", 0, 10, 5)
@@ -99,7 +88,17 @@ if model_name == "Random Forest Model":
     model = pickle.load(open("RandomForest_model", "rb"))
 if model_name == "XGB Model":
     model = pickle.load(open("XGB_model", "rb"))
-
+    
+# --- Prediction ---
+st.subheader("🎯 Prediction Result")
+if st.button("Predict Churn"):
+    prediction = model.predict(scaled_predictions)
+    if int(prediction) == 1:
+        st.error("🚨 Churn Prediction: YES - The employee is likely to leave.")
+    else:
+        st.success("✅ Churn Prediction: NO - The employee is likely to stay.") 
+# --- Images ---
+# st.image(Image.open('models_performance.png'), width=800, caption="Model Performance")
 
 #  st.image(Image.open('churn.png'), width=800, caption='Churn Insight Illustration')
 
