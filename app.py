@@ -29,8 +29,6 @@ with st.expander("ℹ️ Model Info", expanded=True):
     st.markdown("""
         <div class="info-box">
         <b>Recall and Accuracy Scores:</b><br>
-        • <b>Gradient Boosting:</b> Recall (1) = 0.96, Accuracy = 0.99<br>
-        • <b>Random Forest:</b> Recall (1) = 0.97, Accuracy = 0.99<br>
         • <b>XGBoost:</b> Recall (1) = 0.97, Accuracy = 0.99
         </div>
     """, unsafe_allow_html=True)
@@ -104,3 +102,12 @@ if st.button("Predict Churn"):
 
 # --- Footer Image ---
 #  st.image(Image.open('churn.png'), width=800, caption='Churn Insight Illustration')
+
+# ------ Explainer------
+st.subheader("⚙️ Explainer")
+# Train your model (assuming xgb_model is already trained)
+explainer = shap.Explainer(model)
+# Get SHAP values
+shap_values = explainer.shap_values(X_test)
+# Visualize
+shap.summary_plot(shap_values, X_test)
