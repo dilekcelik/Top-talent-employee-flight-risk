@@ -141,7 +141,7 @@ try:
 
     st.subheader("🔍 SHAP Summary Plot (Feature Importance)")
 
-    fig, ax = plt.subplots(figsize=(8, 4))  # smaller plot size
+    fig, ax = plt.subplots(figsize=(6, 4))  # smaller plot size
     shap.summary_plot(shap_values, X_test, show=False, plot_size=(8, 4))
     st.pyplot(fig)
 
