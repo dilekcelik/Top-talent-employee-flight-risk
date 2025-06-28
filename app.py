@@ -121,12 +121,25 @@ y = df.left
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # ------ Explainer------
-st.subheader("⚙️ Explainer")
+st.subheader("📊 Explainer")
 import shap
-import matplotlib
+import matplotlib.pyplot as plt
 # Train your model (assuming xgb_model is already trained)
-explainer = shap.Explainer(model)
+# explainer = shap.Explainer(model)
 # Get SHAP values
-shap_values = explainer.shap_values(X_test)
+# shap_values = explainer.shap_values(X_test)
 # Visualize
-shap.summary_plot(shap_values, X_test)
+# shap.summary_plot(shap_values, X_test)
+
+
+# Create explainer
+explainer = shap.Explainer(model, X_test)  # Pass X_test or a sample DataFrame
+# Get SHAP values
+shap_values = explainer(X_test)
+# Plot summary
+st.subheader("🔍 SHAP Summary Plot (Feature Importance)")
+# Create the plot using matplotlib
+fig = plt.figure()
+shap.plots.beeswarm(shap_values)  # or shap.summary_plot(shap_values, X_test, show=False)
+st.pyplot(fig)
+
