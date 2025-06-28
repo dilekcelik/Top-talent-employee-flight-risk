@@ -103,6 +103,23 @@ if st.button("Predict Churn"):
 # --- Footer Image ---
 #  st.image(Image.open('churn.png'), width=800, caption='Churn Insight Illustration')
 
+# ------ Data ------
+df = pd.read_csv('HR_Analytics.csv')
+df=df.drop_duplicates() # drop dublicates
+#One Hot Encoding
+df_nums = df.select_dtypes(exclude='object')  # This will select numeric columns
+df_objs = df.select_dtypes(include='object')  # This will select object (categorical) columns
+df_objs = pd.get_dummies(df_objs, drop_first=True)  # drop_first=True to avoid multicollinearity
+df = pd.concat([df_nums, df_objs], axis=1)
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder, StandardScaler
+scaler = MinMaxScaler()
+df_scaled = scaler.fit_transform(df)
+df_scaled = pd.DataFrame(df_scaled, columns=df.columns)
+from sklearn.model_selection import train_test_split
+X = df.drop("left", axis=1)
+y = df.left
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
 # ------ Explainer------
 st.subheader("⚙️ Explainer")
 # Train your model (assuming xgb_model is already trained)
