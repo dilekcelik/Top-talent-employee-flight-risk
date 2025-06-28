@@ -1,3 +1,4 @@
+sklearn.ensemble
 xgboost>=1.7.0
 pandas
 pandas
