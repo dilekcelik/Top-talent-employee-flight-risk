@@ -130,11 +130,8 @@ import matplotlib.pyplot as plt
 # shap_values = explainer.shap_values(X_test)
 # Visualize
 # shap.summary_plot(shap_values, X_test)
-
-
 import shap
 import matplotlib.pyplot as plt
-
 try:
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(X_test)
@@ -144,10 +141,17 @@ try:
     fig, ax = plt.subplots(figsize=(6, 4))  # smaller plot size
     shap.summary_plot(shap_values, X_test, show=False, plot_size=(8, 4))
     st.pyplot(fig)
-
 except Exception as e:
     st.warning("⚠️ SHAP explanation failed. Please check the model and features.")
     st.text(f"Error: {str(e)}")
+
+from yellowbrick.model_selection import LearningCurve
+from sklearn.model_selection import StratifiedKFold
+cv = StratifiedKFold(n_splits=12)
+sizes = np.linspace(0.3, 1.0, 10)
+visualizer = LearningCurve(model, cv=cv, scoring='accuracy', train_sizes=sizes, n_jobs=4)
+visualizer.fit(X_train, y_train)        # Fit the data to the visualizer
+visualizer.show()    
 
 
 
