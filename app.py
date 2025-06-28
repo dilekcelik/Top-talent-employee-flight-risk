@@ -4,7 +4,6 @@ import pandas as pd
 from PIL import Image
 
 st.set_page_config(page_title="Employee Churn Predictor", layout="wide")
-
 # --- Header ---
 st.markdown("""
     <style>
@@ -25,6 +24,8 @@ st.markdown("""
 
 st.markdown('<div class="title">🔍 Intelligent Employee Retention System for Churn Prediction</div>', unsafe_allow_html=True)
 
+# --- Footer Image ---
+
 with st.expander("ℹ️ Model Info", expanded=True):
     st.markdown("""
         <div class="info-box">
@@ -33,6 +34,14 @@ with st.expander("ℹ️ Model Info", expanded=True):
         </div>
     """, unsafe_allow_html=True)
 
+# --- Prediction ---
+st.subheader("🎯 Prediction Result")
+if st.button("Predict Churn"):
+    prediction = model.predict(scaled_predictions)
+    if int(prediction) == 1:
+        st.error("🚨 Churn Prediction: YES - The employee is likely to leave.")
+    else:
+        st.success("✅ Churn Prediction: NO - The employee is likely to stay.") 
 # --- Images ---
 # st.image(Image.open('models_performance.png'), width=800, caption="Model Performance")
 
@@ -91,16 +100,7 @@ if model_name == "Random Forest Model":
 if model_name == "XGB Model":
     model = pickle.load(open("XGB_model", "rb"))
 
-# --- Prediction ---
-st.subheader("🎯 Prediction Result")
-if st.button("Predict Churn"):
-    prediction = model.predict(scaled_predictions)
-    if int(prediction) == 1:
-        st.error("🚨 Churn Prediction: YES - The employee is likely to leave.")
-    else:
-        st.success("✅ Churn Prediction: NO - The employee is likely to stay.")
 
-# --- Footer Image ---
 #  st.image(Image.open('churn.png'), width=800, caption='Churn Insight Illustration')
 
 # ------ Data ------
