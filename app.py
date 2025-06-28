@@ -145,13 +145,24 @@ except Exception as e:
     st.warning("⚠️ SHAP explanation failed. Please check the model and features.")
     st.text(f"Error: {str(e)}")
 
+  
+
 from yellowbrick.model_selection import LearningCurve
 from sklearn.model_selection import StratifiedKFold
+import matplotlib.pyplot as plt
+import numpy as np
+# Define cross-validation and training sizes
 cv = StratifiedKFold(n_splits=12)
 sizes = np.linspace(0.3, 1.0, 10)
-visualizer = LearningCurve(model, cv=cv, scoring='accuracy', train_sizes=sizes, n_jobs=4)
-visualizer.fit(X_train, y_train)        # Fit the data to the visualizer
-visualizer.show()    
+# Create a figure for the Yellowbrick plot
+fig, ax = plt.subplots(figsize=(8, 5))
+# Instantiate and fit the visualizer
+visualizer = LearningCurve(model, cv=cv, scoring='accuracy', train_sizes=sizes, n_jobs=4, ax=ax)
+visualizer.fit(X_train, y_train)
+# Render the plot in Streamlit
+st.subheader("📈 Model Learning Curve")
+st.pyplot(fig)
+
 
 
 
