@@ -132,14 +132,28 @@ import matplotlib.pyplot as plt
 # shap.summary_plot(shap_values, X_test)
 
 
-# Create explainer
-explainer = shap.Explainer(model, X_test)  # Pass X_test or a sample DataFrame
-# Get SHAP values
-shap_values = explainer(X_test)
-# Plot summary
-st.subheader("🔍 SHAP Summary Plot (Feature Importance)")
-# Create the plot using matplotlib
-fig = plt.figure()
-shap.plots.beeswarm(shap_values)  # or shap.summary_plot(shap_values, X_test, show=False)
-st.pyplot(fig)
+st.subheader("📊 Explainer")
+import shap
+import matplotlib.pyplot as plt
+
+try:
+    # Use a small sample from your already prepared X_test
+    X_test_sample = X_test.sample(n=100, random_state=42)
+
+    # Explicitly use TreeExplainer for tree-based models like XGB, RF, GB
+    explainer = shap.TreeExplainer(model)
+
+    # Get SHAP values for the sample
+    shap_values = explainer.shap_values(X_test_sample)
+
+    # SHAP Summary Plot
+    st.subheader("🔍 SHAP Summary Plot (Feature Importance)")
+    fig = plt.figure()
+    shap.summary_plot(shap_values, X_test_sample, show=False)
+    st.pyplot(fig)
+
+except Exception as e:
+    st.warning("⚠️ SHAP explainability failed. Likely due to model incompatibility or feature mismatch.")
+    st.text(f"Error: {str(e)}")
+
 
