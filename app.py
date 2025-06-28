@@ -118,21 +118,16 @@ from sklearn.model_selection import train_test_split
 X = df.drop("left", axis=1)
 y = df.left
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+from xgboost import XGBClassifier
+xgb_model = XGBClassifier(random_state=42, eval_metric='logloss')
+xgb_model.fit(X_train, y_train)
 
 # ------ Explainer------
 st.subheader("📊 Explainer")
 import shap
 import matplotlib.pyplot as plt
-# Train your model (assuming xgb_model is already trained)
-# explainer = shap.Explainer(model)
-# Get SHAP values
-# shap_values = explainer.shap_values(X_test)
-# Visualize
-# shap.summary_plot(shap_values, X_test)
-import shap
-import matplotlib.pyplot as plt
 try:
-    explainer = shap.TreeExplainer(model)
+    explainer = shap.TreeExplainer(xgb_model)
     shap_values = explainer.shap_values(X_test)
 
     st.subheader("🔍 SHAP Summary Plot (Feature Importance)")
