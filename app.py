@@ -2,7 +2,6 @@ import streamlit as st
 import pickle
 import pandas as pd
 from PIL import Image
-import shap
 
 st.set_page_config(page_title="Flight Risk Employee Prediction", layout="wide")
 # --- Header ---
