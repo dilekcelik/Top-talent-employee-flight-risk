@@ -36,24 +36,29 @@ with st.expander("ℹ️ Model Info", expanded=True):
     """, unsafe_allow_html=True)
 
 # --- Sidebar ---
-st.subheader("🎛️ Input Features")
+st.subheader("🎛️ Intelligent Employee Retention System for Churn Prediction")
 
-col1, col2 = st.columns(2)
+# Create 3 columns
+col1, col2, col3 = st.columns(3)
 
 with col1:
     satisfaction_level = st.slider("Satisfaction Level", 0, 10, 5)
-    number_project = st.slider("Number of Projects", 2, 7, 4)
-    time_spend_company = st.slider("Years at Company", 1, 10, 3)
     Work_accident = st.radio("Work Accident", [0, 1], horizontal=True)
+    salary = st.radio("Salary", ("low", "medium", "high"), horizontal=True)
 
 with col2:
     last_evaluation = st.slider("Last Evaluation", 0, 10, 5)
-    average_montly_hours = st.slider("Average Monthly Hours", 0, 500, 180, step=8)
-    promotion_last_5years = st.radio("Promotion in Last 5 Years", [0, 1], horizontal=True)
-    salary = st.radio("Salary", ("low", "medium", "high"), horizontal=True)
+    promotion_last_5years = st.radio("Promotion (Last 5 Years)", [0, 1], horizontal=True)
+    model_name = st.selectbox("Select Model", ("XGB Model",))
 
+with col3:
+    number_project = st.slider("Number of Projects", 2, 7, 4)
+    average_montly_hours = st.slider("Avg. Monthly Hours", 0, 500, 180, step=8)
+    time_spend_company = st.slider("Years at Company", 1, 10, 3)
+
+# Department below the row (optional to expand selection)
 Departments = st.selectbox("Department", ("sales", "IT", "RandD", "Departments_hr", "mng", "support", "technical"))
-model_name = st.selectbox("Select Model", ("XGB Model",))
+
 
 
 # --- DataFrame Creation ---
