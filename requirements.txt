@@ -1,8 +1,7 @@
-sklearn.ensemble
+scikit-learn>=1.0.0
 xgboost>=1.7.0
 pandas
 pandas
-scikit-learn>=1.0.0
 streamlit
 numpy
 Pillow
