@@ -138,12 +138,18 @@ try:
     st.subheader("🔍 SHAP Summary Plot (Feature Importance)")
 
     fig, ax = plt.subplots(figsize=(6, 4))  # smaller plot size
-    shap.summary_plot(shap_values, X_test, show=False, plot_size=(8, 4))
+    shap.summary_plot(shap_values, X_test, show=False, plot_size=(6, 4))
     st.pyplot(fig)
 
-    fig, ax = plt.subplots(figsize=(6, 4))  # smaller plot size
-    shap.plots.bar(shap_values)
-    st.pyplot(fig)
+   # SHAP Bar Plot - Convert to Explanation object first
+    shap_exp = shap.Explanation(
+        values=shap_values,
+        base_values=explainer.expected_value,
+        data=X_test,
+        feature_names=X_test.columns)
+    fig2, ax2 = plt.subplots(figsize=(6, 4))
+    shap.plots.bar(shap_exp, show=False)
+    st.pyplot(fig2)
     
 except Exception as e:
     st.warning("⚠️ SHAP explanation failed. Please check the model and features.")
