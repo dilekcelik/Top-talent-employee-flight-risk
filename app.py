@@ -140,7 +140,11 @@ try:
     fig, ax = plt.subplots(figsize=(6, 4))  # smaller plot size
     shap.summary_plot(shap_values, X_test, show=False, plot_size=(8, 4))
     st.pyplot(fig)
+
+    fig, ax = plt.subplots(figsize=(6, 4))  # smaller plot size
+    shap..plots.bar(shap_values, plot_size=(8, 4))
+    st.pyplot(fig)
+    
 except Exception as e:
     st.warning("⚠️ SHAP explanation failed. Please check the model and features.")
     st.text(f"Error: {str(e)}")
-
