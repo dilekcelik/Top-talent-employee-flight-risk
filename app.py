@@ -36,40 +36,25 @@ with st.expander("ℹ️ Model Info", expanded=True):
     """, unsafe_allow_html=True)
 
 # --- Sidebar ---
+st.subheader("🎛️ Input Features")
 
-try:
-    explainer = shap.TreeExplainer(model)
-    shap_values = explainer.shap_values(X_test)
+col1, col2 = st.columns(2)
 
-    st.subheader("🧠 Intelligent Employee Retention System for Churn Prediction")
+with col1:
+    satisfaction_level = st.slider("Satisfaction Level", 0, 10, 5)
+    number_project = st.slider("Number of Projects", 2, 7, 4)
+    time_spend_company = st.slider("Years at Company", 1, 10, 3)
+    Work_accident = st.radio("Work Accident", [0, 1], horizontal=True)
 
-    col1, col2 = st.columns(2)
+with col2:
+    last_evaluation = st.slider("Last Evaluation", 0, 10, 5)
+    average_montly_hours = st.slider("Average Monthly Hours", 0, 500, 180, step=8)
+    promotion_last_5years = st.radio("Promotion in Last 5 Years", [0, 1], horizontal=True)
+    salary = st.radio("Salary", ("low", "medium", "high"), horizontal=True)
 
-    with col1:
-        st.markdown("#### SHAP Summary Plot")
-        fig1, ax1 = plt.subplots(figsize=(6, 4))
-        shap.summary_plot(shap_values, X_test, show=False, plot_size=(6, 4))
-        st.pyplot(fig1)
-        st.markdown("""
-        - Visualizes **how each feature** impacts prediction.
-        - Horizontal spread = **influence**, color = **feature value**.
-        - Example: High `average_monthly_hours` → Higher attrition risk.
-        """)
+Departments = st.selectbox("Department", ("sales", "IT", "RandD", "Departments_hr", "mng", "support", "technical"))
+model_name = st.selectbox("Select Model", ("XGB Model",))
 
-    with col2:
-        st.markdown("#### SHAP Bar Plot")
-        fig2, ax2 = plt.subplots(figsize=(6, 4))
-        shap.plots.bar(shap_values, show=False)
-        st.pyplot(fig2)
-        st.markdown("""
-        - Shows **average impact** of each feature.
-        - Great for understanding overall importance.
-        - Useful when prioritizing **intervention areas**.
-        """)
-
-except Exception as e:
-    st.warning("⚠️ SHAP explanation failed. Please check the model and features.")
-    st.text(f"Error: {str(e)}")
 
 # --- DataFrame Creation ---
 predictions = pd.DataFrame([{
