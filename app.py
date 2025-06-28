@@ -37,29 +37,16 @@ with st.expander("ℹ️ Model Info", expanded=True):
 
 # --- Sidebar ---
 st.subheader("🎛️ Intelligent Employee Retention System for Churn Prediction")
-
-# Create 3 columns
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    satisfaction_level = st.slider("Satisfaction Level", 0, 10, 5)
-    Work_accident = st.radio("Work Accident", [0, 1], horizontal=True)
-    salary = st.radio("Salary", ("low", "medium", "high"), horizontal=True)
-
-with col2:
-    last_evaluation = st.slider("Last Evaluation", 0, 10, 5)
-    promotion_last_5years = st.radio("Promotion (Last 5 Years)", [0, 1], horizontal=True)
-    model_name = st.selectbox("Select Model", ("XGB Model",))
-
-with col3:
-    number_project = st.slider("Number of Projects", 2, 7, 4)
-    average_montly_hours = st.slider("Avg. Monthly Hours", 0, 500, 180, step=8)
-    time_spend_company = st.slider("Years at Company", 1, 10, 3)
-
-# Department below the row (optional to expand selection)
-Departments = st.selectbox("Department", ("sales", "IT", "RandD", "Departments_hr", "mng", "support", "technical"))
-
-
+satisfaction_level  =st.sidebar.slider("Satisfaction Level" , 0, 10)
+last_evaluation     =st.sidebar.slider("Last Evaluation"    , 0, 10)
+number_project      =st.sidebar.slider("Number Project"      , 2, 7)
+average_montly_hours=st.sidebar.slider("Average Montly Hours" , 0, 500, step=8)
+time_spend_company  =st.sidebar.slider("Time Spend Company"  , 1, 10)
+Work_accident       =st.sidebar.slider("Work Accident"        , 0,1)
+promotion_last_5years=st.sidebar.slider("promotion_last_5years", 0,1)
+Departments =st.sidebar.radio("Departments", ("sales","IT","RandD","Departments_hr","mng","support","technical"))
+salary      =st.sidebar.radio("Salary", ("low","medium","high"))
+model_name=st.selectbox("Select your model:", ("Gradient Boosting Model","Random Forest Model","XGB Model" ))
 
 # --- DataFrame Creation ---
 predictions = pd.DataFrame([{
