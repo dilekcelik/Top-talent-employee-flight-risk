@@ -36,7 +36,7 @@ with st.expander("ℹ️ Model Info", expanded=True):
     """, unsafe_allow_html=True)
 
 # --- Images ---
-st.image(Image.open('models_performance.png'), width=800, caption="Model Performance")
+# st.image(Image.open('models_performance.png'), width=800, caption="Model Performance")
 
 # --- Sidebar ---
 st.sidebar.header("🎛️ Input Features")
