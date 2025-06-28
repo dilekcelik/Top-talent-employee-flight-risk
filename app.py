@@ -142,7 +142,7 @@ try:
     st.pyplot(fig)
 
     fig, ax = plt.subplots(figsize=(6, 4))  # smaller plot size
-    shap..plots.bar(shap_values, plot_size=(8, 4))
+    shap.plots.bar(shap_values, plot_size=(8, 4))
     st.pyplot(fig)
     
 except Exception as e:
