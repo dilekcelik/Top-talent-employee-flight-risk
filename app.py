@@ -147,21 +147,30 @@ except Exception as e:
 
   
 
-from yellowbrick.model_selection import LearningCurve
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import learning_curve
 import matplotlib.pyplot as plt
 import numpy as np
-# Define cross-validation and training sizes
-cv = StratifiedKFold(n_splits=12)
-sizes = np.linspace(0.3, 1.0, 10)
-# Create a figure for the Yellowbrick plot
-fig, ax = plt.subplots(figsize=(8, 5))
-# Instantiate and fit the visualizer
-visualizer = LearningCurve(model, cv=cv, scoring='accuracy', train_sizes=sizes, n_jobs=4, ax=ax)
-visualizer.fit(X_train, y_train)
-# Render the plot in Streamlit
 st.subheader("📈 Model Learning Curve")
+# Generate learning curve data
+train_sizes, train_scores, test_scores = learning_curve(
+    model, X_train, y_train,
+    cv=StratifiedKFold(n_splits=12),
+    train_sizes=np.linspace(0.3, 1.0, 10),
+    scoring='accuracy',
+    n_jobs=4)
+# Calculate mean and std
+train_scores_mean = np.mean(train_scores, axis=1)
+test_scores_mean = np.mean(test_scores, axis=1)
+# Plot
+fig, ax = plt.subplots(figsize=(8, 5))
+ax.plot(train_sizes, train_scores_mean, label="Training score", marker='o')
+ax.plot(train_sizes, test_scores_mean, label="Cross-validation score", marker='o')
+ax.set_title("Learning Curve")
+ax.set_xlabel("Training Set Size")
+ax.set_ylabel("Accuracy")
+ax.legend(loc="best")
 st.pyplot(fig)
+
 
 
 
