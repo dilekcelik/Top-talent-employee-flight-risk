@@ -146,7 +146,7 @@ except Exception as e:
     st.text(f"Error: {str(e)}")
 
   
-
+from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import learning_curve
 import matplotlib.pyplot as plt
 import numpy as np
