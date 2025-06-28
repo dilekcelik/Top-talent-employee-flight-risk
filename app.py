@@ -146,18 +146,30 @@ except Exception as e:
     st.text(f"Error: {str(e)}")
 
   
-from sklearn.model_selection import learning_curve, StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, learning_curve
 import numpy as np
 import matplotlib.pyplot as plt
-cv = StratifiedKFold(n_splits=5)  # reduced from 12 to 5
+
+# Check class counts first!
+st.write("y_train class counts:", y_train.value_counts())
+
+# Set n_splits safely:
+min_class_count = y_train.value_counts().min()
+n_splits = min(min_class_count, 5)  # max 5 splits or fewer if class is smaller
+
+cv = StratifiedKFold(n_splits=n_splits)
+
 train_sizes, train_scores, test_scores = learning_curve(
     model, X_train, y_train,
     cv=cv,
     train_sizes=np.linspace(0.3, 1.0, 10),
     scoring='accuracy',
-    n_jobs=4)
+    n_jobs=4
+)
+
 train_scores_mean = np.mean(train_scores, axis=1)
 test_scores_mean = np.mean(test_scores, axis=1)
+
 fig, ax = plt.subplots(figsize=(8, 5))
 ax.plot(train_sizes, train_scores_mean, label="Training score", marker='o')
 ax.plot(train_sizes, test_scores_mean, label="Cross-validation score", marker='o')
