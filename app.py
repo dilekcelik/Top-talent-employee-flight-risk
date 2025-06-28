@@ -88,9 +88,9 @@ st.dataframe(pd.DataFrame(scaled_predictions, columns=columns))
 # --- Model Selection ---
 if model_name == "Gradient Boosting Model":
     model = pickle.load(open("GradientBoosting_model", "rb"))
-elif model_name == "Random Forest Model":
+if model_name == "Random Forest Model":
     model = pickle.load(open("RandomForest_model", "rb"))
-else:
+if model_name == "XGB Model":
     model = pickle.load(open("XGB_model", "rb"))
 
 # --- Prediction ---
@@ -103,4 +103,4 @@ if st.button("Predict Churn"):
         st.success("✅ Churn Prediction: NO - The employee is likely to stay.")
 
 # --- Footer Image ---
-st.image(Image.open('churn.png'), width=800, caption='Churn Insight Illustration')
+#  st.image(Image.open('churn.png'), width=800, caption='Churn Insight Illustration')
