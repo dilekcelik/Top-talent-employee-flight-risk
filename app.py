@@ -30,7 +30,7 @@ with st.expander("ℹ️ Model Info", expanded=True):
     st.markdown("""
         <div class="info-box">
         <b>Recall and Accuracy Scores:</b><br>
-        • <b>XGBoost:</b> Recall (1) = 0.97, Accuracy = 0.99
+        • <b>XGBoost:</b> Recall (1) = 0.91, Accuracy = 0.98
         </div>
     """, unsafe_allow_html=True)
 
