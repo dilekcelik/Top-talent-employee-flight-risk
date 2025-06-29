@@ -90,13 +90,38 @@ if model_name == "XGB Model":
     model = pickle.load(open("XGB_model", "rb"))
     
 # --- Prediction ---
-st.subheader("🎯 Prediction Result")
-if st.button("Predict Churn"):
+st.markdown("""
+    <style>
+    .prediction-box {
+        background-color: #FDEDEC;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #E74C3C;
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .prediction-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #C0392B;
+        margin-bottom: 10px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown('<div class="prediction-box"><div class="prediction-title">🎯 Prediction Result</div>', unsafe_allow_html=True)
+
+if st.button("Predict Flight Risk Employee"):
     prediction = model.predict(scaled_predictions)
     if int(prediction) == 1:
-        st.error("🚨 Churn Prediction: YES - The employee is likely to leave.")
+        st.markdown('<p style="color: red; font-weight: bold;">🚨 Churn Prediction: YES - The employee is likely to leave.</p>', unsafe_allow_html=True)
     else:
-        st.success("✅ Churn Prediction: NO - The employee is likely to stay.") 
+        st.markdown('<p style="color: green; font-weight: bold;">✅ Churn Prediction: NO - The employee is likely to stay.</p>', unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+
+
 # --- Images ---
 # st.image(Image.open('models_performance.png'), width=800, caption="Model Performance")
 
