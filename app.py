@@ -90,35 +90,63 @@ if model_name == "XGB Model":
     model = pickle.load(open("XGB_model", "rb"))
     
 # --- Prediction ---
+# --- Prediction Section Styling ---
 st.markdown("""
     <style>
-    .prediction-box {
-        background-color: #FDEDEC;
-        padding: 20px;
+    .prediction-container {
+        background-color: #E8F6F3; /* light mint background */
+        padding: 25px;
         border-radius: 12px;
-        border: 1px solid #E74C3C;
-        box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
+        border: 1px solid #1ABC9C;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+        margin-top: 20px;
+        margin-bottom: 30px;
     }
     .prediction-title {
-        font-size: 24px;
+        font-size: 26px;
         font-weight: bold;
-        color: #C0392B;
-        margin-bottom: 10px;
+        color: #117A65;
+        margin-bottom: 15px;
+    }
+    .prediction-message {
+        font-size: 20px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        color: #117A65;
+        background-color: #D1F2EB;
+    }
+    .prediction-button > button {
+        background-color: #1ABC9C !important;
+        color: white !important;
+        font-weight: bold;
+        border-radius: 8px;
+        height: 3em;
+        width: 100%;
     }
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="prediction-box"><div class="prediction-title">🎯 Prediction Result</div>', unsafe_allow_html=True)
+# --- Unified Prediction UI ---
+st.markdown('<div class="prediction-container">', unsafe_allow_html=True)
+st.markdown('<div class="prediction-title">🎯 Prediction Result</div>', unsafe_allow_html=True)
 
-if st.button("Predict Flight Risk Employee"):
-    prediction = model.predict(scaled_predictions)
-    if int(prediction) == 1:
-        st.markdown('<p style="color: red; font-weight: bold;">🚨 Churn Prediction: YES - The employee is likely to leave.</p>', unsafe_allow_html=True)
-    else:
-        st.markdown('<p style="color: green; font-weight: bold;">✅ Churn Prediction: NO - The employee is likely to stay.</p>', unsafe_allow_html=True)
+# Place the button inside a form to keep it isolated
+with st.form("predict_form"):
+    st.markdown('<div class="prediction-button">', unsafe_allow_html=True)
+    submit = st.form_submit_button("Predict Churn")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    if submit:
+        prediction = model.predict(scaled_predictions)
+        if int(prediction) == 1:
+            st.markdown('<div class="prediction-message" style="color: #C0392B; background-color: #FADBD8;">🚨 Churn Prediction: YES - The employee is likely to leave.</div>', unsafe_allow_html=True)
+        else:
+            st.markdown('<div class="prediction-message">✅ Churn Prediction: NO - The employee is likely to stay.</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 
