@@ -1,21 +1,16 @@
-import streamlit as st
+Can you add all SHAP graphs to this project? Provide brief interpretation below each graph.  import streamlit as st
 import pickle
 import pandas as pd
 from PIL import Image
-import shap
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
-from xgboost import XGBClassifier
 
 st.set_page_config(page_title="Flight Risk Employee Prediction", layout="wide")
-
-# --- CSS styles ---
+# --- Header ---
 st.markdown("""
     <style>
     .title {
         font-size: 36px;
         font-weight: bold;
-        text-align: center;
+        text-align: acenter;
         color: #2C3E50;
     }
     .info-box {
@@ -24,27 +19,13 @@ st.markdown("""
         border-radius: 10px;
         margin-bottom: 20px;
     }
-    .prediction-box {
-        background-color: #ADD8E6;  /* Light blue background */
-        padding: 20px;
-        border-radius: 12px;
-        border: 1px solid #2980B9;
-        box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-    }
-    .prediction-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #154360;
-        margin-bottom: 10px;
-    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- Header ---
-st.markdown('<div class="title">🧠 Flight Risk Employee Prediction</div>', unsafe_allow_html=True)
+st.markdown('<div class="title">🧠 Flight Risk Employee Prediction </div>', unsafe_allow_html=True)
 
 # --- Footer Image ---
+
 with st.expander("ℹ️ Model Info", expanded=True):
     st.markdown("""
         <div class="info-box">
@@ -55,16 +36,16 @@ with st.expander("ℹ️ Model Info", expanded=True):
 
 # --- Sidebar ---
 st.subheader("🎛️ Intelligent Employee Retention System for Churn Prediction")
-satisfaction_level  = st.sidebar.slider("Satisfaction Level" , 0, 10)
-last_evaluation     = st.sidebar.slider("Last Evaluation"    , 0, 10)
-number_project      = st.sidebar.slider("Number Project"      , 2, 7)
-average_montly_hours= st.sidebar.slider("Average Montly Hours" , 0, 500, step=8)
-time_spend_company  = st.sidebar.slider("Time Spend Company"  , 1, 10)
-Work_accident       = st.sidebar.slider("Work Accident"        , 0,1)
-promotion_last_5years= st.sidebar.slider("Promotion Last 5 Years", 0,1)
-Departments = st.sidebar.radio("Departments", ("sales","IT","RandD","Departments_hr","mng","support","technical"))
-salary      = st.sidebar.radio("Salary", ("low","medium","high"))
-model_name= st.selectbox("Select your model:", ("XGB Model", ))
+satisfaction_level  =st.sidebar.slider("Satisfaction Level" , 0, 10)
+last_evaluation     =st.sidebar.slider("Last Evaluation"    , 0, 10)
+number_project      =st.sidebar.slider("Number Project"      , 2, 7)
+average_montly_hours=st.sidebar.slider("Average Montly Hours" , 0, 500, step=8)
+time_spend_company  =st.sidebar.slider("Time Spend Company"  , 1, 10)
+Work_accident       =st.sidebar.slider("Work Accident"        , 0,1)
+promotion_last_5years=st.sidebar.slider("promotion_last_5years", 0,1)
+Departments =st.sidebar.radio("Departments", ("sales","IT","RandD","Departments_hr","mng","support","technical"))
+salary      =st.sidebar.radio("Salary", ("low","medium","high"))
+model_name=st.selectbox("Select your model:", ("XGB Model" ))
 
 # --- DataFrame Creation ---
 predictions = pd.DataFrame([{
@@ -79,117 +60,172 @@ predictions = pd.DataFrame([{
     'Departments': Departments
 }])
 
-# Show user input dataframe
+# --- Display User Input ---
 st.subheader("📋 Selected Configuration")
 st.dataframe(predictions)
 
-# --- When Predict button pressed ---
-if st.button("Predict"):
+# --- Preprocessing ---
+predictions['salary'] = predictions['salary'].map({'low': 0, 'medium': 1, 'high': 2}).astype(int)
+columns = ['satisfaction_level', 'last_evaluation', 'number_project',
+           'average_montly_hours', 'time_spend_company', 'Work_accident',
+           'promotion_last_5years', 'salary', 'Departments_IT',
+           'Departments_RandD', 'Departments_accounting', 'Departments_hr',
+           'Departments_management', 'Departments_marketing',
+           'Departments_product_mng', 'Departments_sales', 'Departments_support',
+           'Departments_technical']
+predictions = pd.get_dummies(predictions).reindex(columns=columns, fill_value=0)
 
-    # Preprocessing
-    predictions['salary'] = predictions['salary'].map({'low': 0, 'medium': 1, 'high': 2}).astype(int)
-    columns = ['satisfaction_level', 'last_evaluation', 'number_project',
-               'average_montly_hours', 'time_spend_company', 'Work_accident',
-               'promotion_last_5years', 'salary', 'Departments_IT',
-               'Departments_RandD', 'Departments_accounting', 'Departments_hr',
-               'Departments_management', 'Departments_marketing',
-               'Departments_product_mng', 'Departments_sales', 'Departments_support',
-               'Departments_technical']
+# --- Scale ---
+st.subheader("⚙️ Scaled Features")
+scaler_churn = pickle.load(open("scaler_churn", "rb"))
+scaled_predictions = scaler_churn.transform(predictions)
+st.dataframe(pd.DataFrame(scaled_predictions, columns=columns))
 
-    predictions = pd.get_dummies(predictions).reindex(columns=columns, fill_value=0)
+# --- Model Selection ---
+if model_name == "Gradient Boosting Model":
+    model = pickle.load(open("GradientBoosting_model", "rb"))
+if model_name == "Random Forest Model":
+    model = pickle.load(open("RandomForest_model", "rb"))
+if model_name == "XGB Model":
+    model = pickle.load(open("XGB_model", "rb"))
+    
+# --- Prediction ---
+st.markdown("""
+    <style>
+    .prediction-box {
+        background-color: #FDEDEC;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #E74C3C;
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .prediction-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #C0392B;
+        margin-bottom: 10px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-    # Scale
-    scaler_churn = pickle.load(open("scaler_churn", "rb"))
-    scaled_predictions = scaler_churn.transform(predictions)
+st.markdown('<div class="prediction-box"><div class="prediction-title">🎯 Prediction Result</div>', unsafe_allow_html=True)
 
-    st.subheader("⚙️ Scaled Features")
-    st.dataframe(pd.DataFrame(scaled_predictions, columns=columns))
-
-    # Load model
-    if model_name == "XGB Model":
-        model = pickle.load(open("XGB_model", "rb"))
-
-    # Prediction result box with blue background
-    st.markdown('<div class="prediction-box"><div class="prediction-title">🎯 Prediction Result</div>', unsafe_allow_html=True)
-
+if st.button("Predict Churn"):
     prediction = model.predict(scaled_predictions)
     if int(prediction) == 1:
         st.markdown('<p style="color: red; font-weight: bold;">🚨 Churn Prediction: YES - The employee is likely to leave.</p>', unsafe_allow_html=True)
     else:
         st.markdown('<p style="color: green; font-weight: bold;">✅ Churn Prediction: NO - The employee is likely to stay.</p>', unsafe_allow_html=True)
 
-    st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
-    # Load dataset for explainer (ensure this matches model training data)
-    df = pd.read_csv('HR_Analytics.csv').drop_duplicates()
-    df_nums = df.select_dtypes(exclude='object')
-    df_objs = df.select_dtypes(include='object')
-    df_objs = pd.get_dummies(df_objs, drop_first=True)
-    df = pd.concat([df_nums, df_objs], axis=1)
 
-    X = df.drop("left", axis=1)
-    y = df.left
-    X = X.reindex(columns=columns, fill_value=0)
 
-    # SHAP Explainer
-    st.subheader("📊 SHAP Explanations")
+# --- Images ---
+# st.image(Image.open('models_performance.png'), width=800, caption="Model Performance")
 
-    explainer = shap.TreeExplainer(model)
-    shap_values = explainer.shap_values(X)
+#  st.image(Image.open('churn.png'), width=800, caption='Churn Insight Illustration')
 
-    # 1️⃣ SHAP Summary Plot (Feature Impact)
-    fig1, ax1 = plt.subplots(figsize=(8,5))
-    shap.summary_plot(shap_values, X, show=False)
-    st.pyplot(fig1)
-    st.markdown("**Interpretation:** Red indicates features pushing towards churn; blue indicates features supporting retention. The farther from the center, the stronger the influence.")
+# ------ Data ------
+df = pd.read_csv('HR_Analytics.csv')
+df=df.drop_duplicates() # drop dublicates
+#One Hot Encoding
+df_nums = df.select_dtypes(exclude='object')  # This will select numeric columns
+df_objs = df.select_dtypes(include='object')  # This will select object (categorical) columns
+df_objs = pd.get_dummies(df_objs, drop_first=True)  # drop_first=True to avoid multicollinearity
+df = pd.concat([df_nums, df_objs], axis=1)
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder, StandardScaler
+scaler = MinMaxScaler()
+df_scaled = scaler.fit_transform(df)
+df_scaled = pd.DataFrame(df_scaled, columns=df.columns)
+from sklearn.model_selection import train_test_split
+X = df.drop("left", axis=1)
+y = df.left
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+from xgboost import XGBClassifier
+xgb_model = XGBClassifier(random_state=42, eval_metric='logloss')
+xgb_model.fit(X_train, y_train)
 
-    # 2️⃣ SHAP Bar Plot (Mean Absolute SHAP Values)
+# ------ Explainer------
+st.subheader("📊 Explainer")
+import shap
+import matplotlib.pyplot as plt
+import numpy as np
+
+try:
+    explainer = shap.TreeExplainer(xgb_model)
+    shap_values = explainer.shap_values(X_test)
+
+    # 1) SHAP Summary Plot (Feature Importance)
+    st.subheader("🔍 SHAP Summary Plot (Feature Importance)")
+    fig, ax = plt.subplots(figsize=(8, 5))
+    shap.summary_plot(shap_values, X_test, show=False)
+    st.pyplot(fig)
+    st.markdown("""
+    **Interpretation:** This plot shows the impact of each feature on the model's output across the test dataset.  
+    Features at the top are most important. Color represents feature value (red=high, blue=low).  
+    The horizontal spread shows how much the feature value changes the prediction (SHAP value).  
+    """)
+
+    # 2) SHAP Bar Plot
     shap_exp = shap.Explanation(
         values=shap_values,
         base_values=explainer.expected_value,
-        data=X,
-        feature_names=X.columns)
-    fig2, ax2 = plt.subplots(figsize=(8,5))
+        data=X_test,
+        feature_names=X_test.columns)
+    fig2, ax2 = plt.subplots(figsize=(8, 5))
     shap.plots.bar(shap_exp, show=False)
     st.pyplot(fig2)
-    st.markdown("**Interpretation:** This plot ranks features by their average impact across the dataset. The top features are most influential for churn predictions.")
+    st.markdown("""
+    **Interpretation:** This bar plot ranks features by their average absolute SHAP value, summarizing overall feature importance.  
+    It quantifies how much each feature contributes to model predictions on average.
+    """)
 
-    # 3️⃣ SHAP Beeswarm Plot
-    fig3, ax3 = plt.subplots(figsize=(8,5))
-    shap.plots.beeswarm(shap_exp, show=False)
+    # 3) SHAP Dependence Plot for top feature (most important feature from summary plot)
+    top_feature = X_test.columns[np.argmax(np.abs(shap_values).mean(0))]
+    st.subheader(f"📈 SHAP Dependence Plot for '{top_feature}'")
+    fig3, ax3 = plt.subplots(figsize=(8, 5))
+    shap.dependence_plot(top_feature, shap_values, X_test, show=False)
     st.pyplot(fig3)
-    st.markdown("**Interpretation:** Each dot represents a prediction. Clusters reveal patterns in feature contributions, colored by feature values.")
+    st.markdown(f"""
+    **Interpretation:** This plot shows how changes in the feature '{top_feature}' affect the prediction.  
+    You can see interaction effects and whether higher or lower values increase or decrease flight risk.
+    """)
 
-    # 4️⃣ Global SHAP Force Plot for Average Profile
-    mean_shap_values = shap_values.mean(axis=0)
-    fig4, ax4 = plt.subplots(figsize=(10,3))
-    shap.force_plot(explainer.expected_value, mean_shap_values, X.iloc[0], matplotlib=True, show=False)
+    # 4) SHAP Force Plot for the current prediction input
+    st.subheader("⚡ SHAP Force Plot for Current Prediction")
+    input_array = scaled_predictions[0].reshape(1, -1)
+    input_df = pd.DataFrame(input_array, columns=columns)
+    input_df_original_scale = predictions  # the original input before scaling
+
+    # We need to convert scaled input back to original scale or just use original input features for force plot
+    shap_values_single = explainer.shap_values(input_df)
+
+    # For force plot, we use explainer.expected_value and shap_values of single instance
+    force_plot_html = shap.force_plot(
+        explainer.expected_value,
+        shap_values_single[0],
+        input_df.iloc[0],
+        matplotlib=False
+    )
+    st.components.v1.html(force_plot_html.data, height=300)
+    st.markdown("""
+    **Interpretation:** The force plot visualizes how each feature pushes the prediction from the baseline probability.  
+    Red bars push towards higher risk of churn, blue bars push towards retention.  
+    The length of each bar shows the magnitude of that feature's impact on this specific prediction.
+    """)
+
+    # 5) SHAP Decision Plot for the current prediction
+    st.subheader("📉 SHAP Decision Plot for Current Prediction")
+    fig4, ax4 = plt.subplots(figsize=(8, 5))
+    shap.decision_plot(explainer.expected_value, shap_values_single, input_df, show=False)
     st.pyplot(fig4)
-    st.markdown("**Interpretation:** Red features push towards churn; blue push towards retention for an average employee profile.")
+    st.markdown("""
+    **Interpretation:** The decision plot shows how the model arrives at the final prediction step-by-step.  
+    It illustrates the cumulative effect of features pushing the prediction higher or lower relative to the baseline.
+    """)
 
-    # 5️⃣ SHAP Force Plot for Your Input
-    fig5, ax5 = plt.subplots(figsize=(10,3))
-    shap.force_plot(explainer.expected_value, shap_values[0], scaled_predictions[0], matplotlib=True, show=False)
-    st.pyplot(fig5)
-    st.markdown("**Interpretation:** Shows how your input features push the prediction toward churn or retention.")
-
-    # 6️⃣ SHAP Waterfall Plot for Your Input
-    fig6, ax6 = plt.subplots(figsize=(10,5))
-    shap.plots.waterfall(shap.Explanation(values=shap_values[0],
-                                         base_values=explainer.expected_value,
-                                         data=X.iloc[0],
-                                         feature_names=X.columns), show=False)
-    st.pyplot(fig6)
-    st.markdown("**Interpretation:** Breaks down the prediction for your input feature by feature, showing the cumulative effect.")
-
-    # SHAP Dependence plots for top 3 features
-    top_features = X.columns[:3]
-    for feature in top_features:
-        st.subheader(f"🔍 SHAP Dependence Plot: {feature}")
-        fig_dp, ax_dp = plt.subplots(figsize=(8,4))
-        shap.dependence_plot(feature, shap_values, X, show=False, ax=ax_dp)
-        st.pyplot(fig_dp)
-        st.markdown(f"**Interpretation:** Shows how the value of **{feature}** affects its contribution to churn prediction across the dataset.")
-
-else:
-    st.info("Click the **Predict** button to run prediction and see SHAP explanations.")
+except Exception as e:
+    st.warning("⚠️ SHAP explanation failed. Please check the model and features.")
+    st.text(f"Error: {str(e)}")
