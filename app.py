@@ -135,8 +135,22 @@ st.pyplot(fig4)
 st.markdown("> **Interpretation:** Red features push towards churn; blue push to retain.")
 
 # 5️⃣ Force Plot for user input
+import streamlit.components.v1 as components
 st.subheader("5️⃣ SHAP Force Plot for Your Input")
+# Get SHAP values for the input (make sure shap_input is the correct output shape)
 shap_input = explainer.shap_values(scaled_input)
-fig5 = shap.force_plot(explainer.expected_value, shap_input[0], feature_names=X.columns, matplotlib=True)
-st.pyplot(fig5)
+
+# Create interactive force plot (matplotlib=False)
+force_plot_html = shap.force_plot(
+    explainer.expected_value, 
+    shap_input[0],  # assuming shap_input[0] corresponds to your input
+    scaled_input[0],  # pass the input features (scaled) for display
+    feature_names=X.columns,
+    matplotlib=False
+)
+
+# Embed the plot as HTML inside Streamlit
+components.html(force_plot_html.html(), height=400)
+
 st.markdown("> **Interpretation:** Breakdown of your input's impact on churn prediction.")
+
