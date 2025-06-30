@@ -35,7 +35,7 @@ st.markdown("""
     .prediction-title {
         font-size: 24px;
         font-weight: bold;
-        color: #1B4F72;
+        color: #65d2f0;
         margin-bottom: 10px;
     }
     </style>
