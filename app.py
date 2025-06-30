@@ -56,16 +56,16 @@ with st.expander("ℹ️ Model Info", expanded=True):
 
 # --- Sidebar ---
 st.subheader("🎛️ Intelligent Employee Retention System for Churn Prediction")
-satisfaction_level  = st.sidebar.slider("Satisfaction Level", 0, 10)
-last_evaluation     = st.sidebar.slider("Last Evaluation", 0, 10)
-number_project      = st.sidebar.slider("Number Project", 2, 7)
-average_montly_hours = st.sidebar.slider("Average Montly Hours", 0, 500, step=8)
-time_spend_company  = st.sidebar.slider("Time Spend Company", 1, 10)
+satisfaction_level  = st.sidebar.slider("Satisfaction Level", 0, 10, value=5)
+last_evaluation     = st.sidebar.slider("Last Evaluation", 0, 10, value=5)
+number_project      = st.sidebar.slider("Number Project", 2, 7, value=4)
+average_montly_hours = st.sidebar.slider("Average Montly Hours", 0, 500, step=8, value=250)
+time_spend_company  = st.sidebar.slider("Time Spend Company", 1, 10, value=5)
 Work_accident       = st.sidebar.slider("Work Accident", 0, 1)
 promotion_last_5years = st.sidebar.slider("Promotion Last 5 Years", 0, 1)
 Departments         = st.sidebar.radio("Departments", ("sales", "IT", "RandD", "Departments_hr", "mng", "support", "technical"))
 salary              = st.sidebar.radio("Salary", ("low", "medium", "high"))
-model_name          = st.selectbox("Select your model:", ("XGB Model", ))
+model_name          = st.selectbox("Select your model:", ("XGB Model"))
 
 # --- DataFrame Creation ---
 predictions = pd.DataFrame([{
