@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from xgboost import XGBClassifier
 import streamlit.components.v1 as components
+shap.initjs()
 
 st.set_page_config(page_title="Flight Risk Employee Prediction", layout="wide")
 
