@@ -149,9 +149,3 @@ fig3, ax3 = plt.subplots()
 shap.plots.beeswarm(shap_values, show=False)
 st.pyplot(fig3)
 st.info("""Each dot represents a prediction. Clusters reveal patterns in feature contributions, colored by feature values.""")
-
-# 4️⃣ Global SHAP Force Plot
-st.markdown("### 🌐 Global SHAP Force Plot for Average Profile")
-avg_exp = shap.Explanation(values=shap_values.values.mean(0), base_values=explainer.expected_value, data=X_test.iloc[0], feature_names=X_test.columns.tolist())
-components.html(shap.plots.force(avg_exp, matplotlib=False), height=200)
-st.info("Red features push towards churn; blue push to retain. This is an aggregate view of the typical employee profile.")
