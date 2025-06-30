@@ -155,9 +155,3 @@ st.markdown("### 🌐 Global SHAP Force Plot for Average Profile")
 avg_exp = shap.Explanation(values=shap_values.values.mean(0), base_values=explainer.expected_value, data=X_test.iloc[0], feature_names=X_test.columns.tolist())
 components.html(shap.plots.force(avg_exp, matplotlib=False), height=200)
 st.info("Red features push towards churn; blue push to retain. This is an aggregate view of the typical employee profile.")
-
-# 5️⃣ Individual SHAP Force Plot
-st.markdown("### 👤 SHAP Force Plot for Your Input")
-custom_exp = explainer(pd.DataFrame(scaled_predictions, columns=X.columns))
-components.html(shap.plots.force(custom_exp[0], matplotlib=False), height=200)
-st.info("This visual shows how your input features contribute to the churn prediction.")
