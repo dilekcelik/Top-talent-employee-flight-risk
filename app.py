@@ -158,6 +158,9 @@ st.info("Red features push towards churn; blue push to retain. This is an aggreg
 
 # 5️⃣ Individual SHAP Force Plot
 st.markdown("### 👤 SHAP Force Plot for Your Input")
-custom_exp = explainer(pd.DataFrame(scaled_predictions, columns=X.columns))
-components.html(shap.plots.force(custom_exp[0], matplotlib=False), height=200)
+import streamlit.components.v1 as components
+scaled_input_df = pd.DataFrame(scaled_input, columns=X.columns)
+custom_exp = explainer(scaled_input_df)
+components.html(shap.plots.force(custom_exp[0], matplotlib=False), height=300)
 st.info("This visual shows how your input features contribute to the churn prediction.")
+
