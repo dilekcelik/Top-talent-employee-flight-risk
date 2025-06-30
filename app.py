@@ -157,10 +157,15 @@ components.html(shap.plots.force(avg_exp, matplotlib=False), height=200)
 st.info("Red features push towards churn; blue push to retain. This is an aggregate view of the typical employee profile.")
 
 # 5️⃣ Individual SHAP Force Plot
+# 5️⃣ Individual SHAP Force Plot
 st.markdown("### 👤 SHAP Force Plot for Your Input")
 import streamlit.components.v1 as components
+# Convert scaled input to DataFrame with feature names
 scaled_input_df = pd.DataFrame(scaled_input, columns=X.columns)
+# Get SHAP values for the input
 custom_exp = explainer(scaled_input_df)
+# Embed the interactive SHAP force plot using components.html
 components.html(shap.plots.force(custom_exp[0], matplotlib=False), height=300)
 st.info("This visual shows how your input features contribute to the churn prediction.")
+
 
